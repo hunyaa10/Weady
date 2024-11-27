@@ -4,7 +4,7 @@ import WeatherSection from "../components/main/WeatherSection";
 import MainHeader from "../components/main/MainHeader";
 import { useNavigation } from "@react-navigation/native";
 import { globalStyles } from "../style/globalStyle";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CityMenu from "../components/main/CityMenu";
 import ChatIcon from "../icon/chat.svg";
 import CustomButton from "../components/custom/CustomButton";
@@ -17,8 +17,29 @@ import CustomButton from "../components/custom/CustomButton";
 
 const Home = () => {
   const navigation = useNavigation();
-  const { address, days, isLoading } = useWeather();
   const [showMenu, setShowMenu] = useState(false);
+  const [latitude, setLatitude] = useState(null);
+  const [longitude, setLongitude] = useState(null);
+
+  const { address, days, isLoading, getLocation } = useWeather(
+    latitude,
+    longitude
+  );
+
+  const fetchLocation = async () => {
+    const { latitude, longitude } = await getLocation();
+    setLatitude(latitude);
+    setLongitude(longitude);
+  };
+
+  useEffect(() => {
+    fetchLocation();
+  }, []);
+
+  const cityLocation = (lat, lon) => {
+    setLatitude(lat);
+    setLongitude(lon);
+  };
 
   const naviToChat = () => {
     navigation.navigate("Chat");
@@ -43,7 +64,9 @@ const Home = () => {
           zIndex: 9,
         }}
       />
-      {showMenu && <CityMenu setShowMenu={setShowMenu} />}
+      {showMenu && (
+        <CityMenu setShowMenu={setShowMenu} cityLocation={cityLocation} />
+      )}
     </View>
   );
 };

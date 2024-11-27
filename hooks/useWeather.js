@@ -7,21 +7,33 @@ const groupByDate = (weatherData) => {
 
   weatherData.forEach((data) => {
     const date = data.dt_txt.split(" ")[0];
-
     if (!grouped[date]) {
       grouped[date] = [];
     }
-
     grouped[date].push(data);
   });
 
   return grouped;
 };
 
-const useWeather = () => {
+const useWeather = (latitude, longitude) => {
   const [address, setAddress] = useState("");
   const [days, setDays] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  const getLocation = async () => {
+    const { granted } = await Location.requestForegroundPermissionsAsync();
+    // console.log(granted);
+    if (!granted) {
+      setIsLoading(false);
+      return;
+    }
+
+    const location = await Location.getCurrentPositionAsync({ accuracy: 5 });
+    // console.log(location);
+    const { latitude, longitude } = location.coords;
+    return { latitude, longitude };
+  };
 
   const getWeatherInfo = async (latitude, longitude) => {
     const weatherApiKey = WEATHER_API_KEY;
@@ -44,28 +56,27 @@ const useWeather = () => {
     }
   };
 
-  const getLocation = async () => {
-    const { granted } = await Location.requestForegroundPermissionsAsync();
-    // console.log(granted);
-    if (!granted) {
-      setIsLoading(false);
-      return;
-    }
-
-    const location = await Location.getCurrentPositionAsync({ accuracy: 5 });
-    // console.log(location);
-    const { latitude, longitude } = location.coords;
-
-    const { city, groupedWeather } = await getWeatherInfo(latitude, longitude);
-    setAddress(city);
-    setDays(groupedWeather);
-  };
-
   useEffect(() => {
-    getLocation();
-  }, []);
+    const fetchWeather = async () => {
+      setIsLoading(true);
+      let lat = latitude;
+      let lon = longitude;
 
-  return { address, days, isLoading };
+      if (lat === null || lon === null) {
+        const location = await getLocation();
+        lat = location.latitude;
+        lon = location.longitude;
+      }
+
+      const { city, groupedWeather } = await getWeatherInfo(lat, lon);
+      setAddress(city);
+      setDays(groupedWeather);
+    };
+
+    fetchWeather();
+  }, [latitude, longitude]);
+
+  return { address, days, isLoading, getLocation };
 };
 
 export default useWeather;
