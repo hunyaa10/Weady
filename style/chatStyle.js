@@ -3,13 +3,6 @@ import { Dimensions, StyleSheet } from "react-native";
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
 
 export const chatStyles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 16,
-  },
-
   messagesList: {
     flex: 1,
     width: SCREEN_WIDTH - 32,
@@ -32,7 +25,6 @@ export const chatStyles = StyleSheet.create({
   },
   messageText: {
     fontSize: 16,
-    color: "#000",
   },
 
   inputContainer: {
@@ -42,6 +34,11 @@ export const chatStyles = StyleSheet.create({
     justifyContent: "center",
     gap: 8,
     marginTop: 20,
+    backgroundColor: "#fff",
+    position: "fixed",
+    bottom: 0,
+    left: 0,
+    paddingVertical: 16,
   },
   userInput: {
     width: "80%",
@@ -51,5 +48,10 @@ export const chatStyles = StyleSheet.create({
     borderRadius: 8,
     paddingLeft: 8,
   },
-  inputBtn: {},
+
+  sendBtn: {
+    padding: 10,
+    backgroundColor: "#0D819E",
+    borderRadius: 10,
+  },
 });

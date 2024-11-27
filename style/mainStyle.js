@@ -2,14 +2,9 @@ import { Dimensions, StyleSheet } from "react-native";
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
 
-export const styles = StyleSheet.create({
-  container: {
-    padding: 16,
-    flex: 1,
-    backgroundColor: "#EDF1F4",
-  },
+export const mainStyles = StyleSheet.create({
   header: {
-    padding: 16,
+    paddingVertical: 16,
     flex: 0.5,
     flexDirection: "row",
     justifyContent: "space-between",
@@ -17,6 +12,7 @@ export const styles = StyleSheet.create({
     borderBottomColor: "#000",
     borderBottomWidth: 3,
     marginBottom: 16,
+    position: "relative",
   },
   cityName: {
     fontSize: 32,
@@ -64,9 +60,6 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
     gap: 8,
   },
-  icon: {
-    // marginTop: 2,
-  },
   currentDescription: {
     fontSize: 24,
   },
@@ -89,5 +82,38 @@ export const styles = StyleSheet.create({
   },
   temperFont: {
     fontSize: 32,
+  },
+
+  menuContainer: {
+    width: SCREEN_WIDTH,
+    height: SCREEN_HEIGHT - 64,
+    position: "absolute",
+    top: 0,
+    left: 0,
+    zIndex: 99,
+    backgroundColor: "rgba(0,0,0,0.9)",
+  },
+  cityList: {
+    padding: 16,
+  },
+  city: {
+    padding: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: "#fff",
+  },
+  cityText: {
+    fontSize: 20,
+    fontWeight: 600,
+    color: "#fff",
+    textAlign: "center",
+  },
+  menuCloseBtn: {
+    position: "absolute",
+    bottom: 20,
+    right: 20,
+    backgroundColor: "transparent",
+    zIndex: 100,
+    borderWidth: 1,
+    borderColor: "#fff",
   },
 });
