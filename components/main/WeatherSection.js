@@ -1,5 +1,5 @@
 import React from "react";
-import { styles } from "../style/mainStyle";
+import { mainStyles } from "../../style/mainStyle";
 import { ScrollView, Text, View } from "react-native";
 import TemperOfDate from "./TemperOfDate";
 
@@ -22,16 +22,22 @@ const WeatherSection = ({ days }) => {
     return daysOfWeek[dayIndex];
   };
   return (
-    <ScrollView horizontal pagingEnabled contentContainerStyle={styles.scroll}>
+    <ScrollView
+      horizontal
+      pagingEnabled
+      contentContainerStyle={mainStyles.scroll}
+    >
       {Object.keys(days).map((date) => {
         const daysOfWeek = getDayOfWeek(date);
         return (
-          <View key={date} style={styles.weatherContainer}>
-            <View style={styles.dayBox}>
-              <Text style={styles.week}>{daysOfWeek.toLocaleUpperCase()}</Text>
-              <Text style={styles.date}>{date}</Text>
+          <View key={date} style={mainStyles.weatherContainer}>
+            <View style={mainStyles.dayBox}>
+              <Text style={mainStyles.week}>
+                {daysOfWeek.toLocaleUpperCase()}
+              </Text>
+              <Text style={mainStyles.date}>{date}</Text>
             </View>
-            <View style={styles.weatherInfo}>
+            <View style={mainStyles.weatherInfo}>
               <TemperOfDate weatherData={days[date]} />
             </View>
           </View>

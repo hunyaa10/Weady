@@ -1,18 +1,13 @@
 import React from "react";
-import { Image, ImageBackground, Text, View } from "react-native";
-import { styles } from "../style/mainStyle";
+import { Image, Text, View } from "react-native";
+import { mainStyles } from "../../style/mainStyle";
+import { globalStyles } from "../../style/globalStyle";
 
 // 날씨아이콘
 import SunnyIcon from "../../icon/icons8-맑음-32.png";
 import CloudIcon from "../../icon/icons8-구름-32.png";
 import RainIcon from "../../icon/icons8-비-32.png";
 import SnowIcon from "../../icon/icons8-눈-32.png";
-
-// 날씨별배경이미지
-import ClearBg from "../../image/clear.jpg";
-import CloudsBg from "../../image/clouds.jpg";
-import RainBg from "../../image/rain.jpg";
-import SnowBg from "../../image/snow.jpg";
 
 const TemperOfDate = ({ weatherData }) => {
   // console.log(weatherData);
@@ -55,23 +50,23 @@ const TemperOfDate = ({ weatherData }) => {
   };
 
   return (
-    <View style={styles.weatherWrapper}>
-      <View style={styles.thumbnailWeather}>
-        <Text style={styles.currentTemper}>{thumbnailTemper}º</Text>
-        <View style={styles.scriptBox}>
-          <Image source={thumbnailIcon()} style={styles.icon} />
-          <Text style={styles.currentDescription}>{thumbnailDescript}</Text>
+    <View style={mainStyles.weatherWrapper}>
+      <View style={mainStyles.thumbnailWeather}>
+        <Text style={mainStyles.currentTemper}>{thumbnailTemper}º</Text>
+        <View style={mainStyles.scriptBox}>
+          <Image source={thumbnailIcon()} style={globalStyles.bigIcon} />
+          <Text style={mainStyles.currentDescription}>{thumbnailDescript}</Text>
         </View>
       </View>
-      <View style={styles.temperBox}>
+      <View style={mainStyles.temperBox}>
         {weatherData.map((data) => {
           const feelsLike = (data.main.feels_like - 273.15).toFixed(0);
           return (
-            <View key={data.dt} style={styles.temper}>
-              <Text style={styles.timeFont}>
+            <View key={data.dt} style={mainStyles.temper}>
+              <Text style={mainStyles.timeFont}>
                 {data.dt_txt.split(" ")[1].split(":")[0]}시
               </Text>
-              <Text style={styles.temperFont}>{feelsLike}º</Text>
+              <Text style={mainStyles.temperFont}>{feelsLike}º</Text>
             </View>
           );
         })}
