@@ -6,6 +6,7 @@ export const chatStyles = StyleSheet.create({
   messagesList: {
     flex: 1,
     width: SCREEN_WIDTH - 32,
+    marginBottom: 80,
   },
   messageContainer: {
     maxWidth: "80%",
@@ -14,12 +15,12 @@ export const chatStyles = StyleSheet.create({
     borderRadius: 16,
   },
   userMessage: {
-    backgroundColor: "#cce5ff",
+    backgroundColor: "#C9E4EB",
     alignSelf: "flex-end",
     borderBottomEndRadius: 0,
   },
   aiMessage: {
-    backgroundColor: "#f0f0f0",
+    backgroundColor: "#fff",
     alignSelf: "flex-start",
     borderBottomStartRadius: 0,
   },
@@ -29,16 +30,16 @@ export const chatStyles = StyleSheet.create({
 
   inputContainer: {
     width: SCREEN_WIDTH,
+    height: 80,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
     gap: 8,
-    marginTop: 20,
     backgroundColor: "#fff",
-    position: "fixed",
+    position: "absolute",
     bottom: 0,
     left: 0,
-    paddingVertical: 16,
+    zIndex: 99,
   },
   userInput: {
     width: "80%",

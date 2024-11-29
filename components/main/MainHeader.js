@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import { mainStyles } from "../../style/mainStyle";
 import { Text, View } from "react-native";
-import CityMenu from "./CityMenu";
 import CustomButton from "../custom/CustomButton";
 
 import EarthIcon from "../../icon/earth.svg";
