@@ -1,4 +1,3 @@
-import * as Location from "expo-location";
 import { useEffect, useState } from "react";
 import { WEATHER_API_KEY } from "@env";
 
@@ -21,23 +20,9 @@ const useWeather = (latitude, longitude) => {
   const [days, setDays] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const getLocation = async () => {
-    const { granted } = await Location.requestForegroundPermissionsAsync();
-    // console.log(granted);
-    if (!granted) {
-      setIsLoading(false);
-      return;
-    }
-
-    const location = await Location.getCurrentPositionAsync({ accuracy: 5 });
-    // console.log(location);
-    const { latitude, longitude } = location.coords;
-    return { latitude, longitude };
-  };
-
-  const getWeatherInfo = async (latitude, longitude) => {
+  const getWeatherInfo = async (lat, lon) => {
     const weatherApiKey = WEATHER_API_KEY;
-    const url = `https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&exclude={part}&appid=${weatherApiKey}`;
+    const url = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&exclude={part}&appid=${weatherApiKey}`;
 
     try {
       const response = await fetch(url);
@@ -48,35 +33,23 @@ const useWeather = (latitude, longitude) => {
       const daysWeather = data.list;
 
       const groupedWeather = groupByDate(daysWeather);
-      return { city, groupedWeather };
+
+      setAddress(city);
+      setDays(groupedWeather);
+      setIsLoading(false);
     } catch (e) {
       console.log("지역별 날씨정보를 가져오는 중 오류발생: ", e);
-    } finally {
-      setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    const fetchWeather = async () => {
+    if (latitude && longitude) {
       setIsLoading(true);
-      let lat = latitude;
-      let lon = longitude;
-
-      if (lat === null || lon === null) {
-        const location = await getLocation();
-        lat = location.latitude;
-        lon = location.longitude;
-      }
-
-      const { city, groupedWeather } = await getWeatherInfo(lat, lon);
-      setAddress(city);
-      setDays(groupedWeather);
-    };
-
-    fetchWeather();
+      getWeatherInfo(latitude, longitude);
+    }
   }, [latitude, longitude]);
 
-  return { address, days, isLoading, getLocation };
+  return { address, days, isLoading };
 };
 
 export default useWeather;
