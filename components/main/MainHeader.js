@@ -1,10 +1,8 @@
 import React from "react";
 import { mainStyles } from "../../style/mainStyle";
-import { Text, View } from "react-native";
-import CustomButton from "../custom/CustomButton";
-
-import PinIcon from "../../icon/pin.svg";
-import MenuIcon from "../../icon/menu.svg";
+import { Text, TouchableOpacity, View } from "react-native";
+import PinIcon from "../../assets/PinIcon";
+import MenuIcon from "../../assets/MenuIcon";
 
 const MainHeader = ({
   isLoading,
@@ -18,18 +16,12 @@ const MainHeader = ({
         {isLoading ? "loading..." : `${address}`}
       </Text>
       <View style={mainStyles.menuBox}>
-        <CustomButton
-          imageSource={PinIcon}
-          iconSize={"big"}
-          style={{ backgroundColor: "transparents", padding: 0 }}
-          onPress={() => setShowCityMenu(true)}
-        />
-        <CustomButton
-          imageSource={MenuIcon}
-          iconSize={"big"}
-          style={{ backgroundColor: "transparents", padding: 0 }}
-          onPress={() => setShowSideMenu(true)}
-        />
+        <TouchableOpacity onPress={() => setShowCityMenu}>
+          <PinIcon />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => setShowSideMenu}>
+          <MenuIcon />
+        </TouchableOpacity>
       </View>
     </View>
   );

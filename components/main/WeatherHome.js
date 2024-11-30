@@ -8,9 +8,9 @@ import { useNavigation } from "@react-navigation/native";
 import { globalStyles } from "../../style/globalStyle";
 import CityMenu from "../menu/CityMenu";
 import { mainStyles } from "../../style/mainStyle";
-import CustomButton from "../custom/CustomButton";
-import AiChatIcon from "../../icon/ai-chat.svg";
 import SideMenu from "../menu/SideMenu";
+import CustomButton from "../custom/CustomButton";
+import AiChatIcon from "../../assets/AiChatIcon";
 
 const WeatherHome = () => {
   const navigation = useNavigation();
@@ -81,12 +81,9 @@ const WeatherHome = () => {
       ) : (
         <>
           <WeatherSection days={days} />
-          <CustomButton
-            onPress={naviToChat}
-            imageSource={AiChatIcon}
-            iconSize={"big"}
-            style={mainStyles.chatBtn}
-          />
+          <CustomButton onPress={naviToChat} style={mainStyles.chatBtn}>
+            <AiChatIcon />
+          </CustomButton>
         </>
       )}
       {showCityMenu && (
