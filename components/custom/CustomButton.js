@@ -11,7 +11,7 @@ const CustomButton = ({ onPress, text, imageSource, style, iconSize }) => {
       {imageSource ? (
         <Image source={imageSource} style={iconStyle} />
       ) : (
-        <Text style={styles.buttonText}>{text}</Text>
+        <Text style={[styles.buttonText, style?.text]}>{text}</Text>
       )}
     </TouchableOpacity>
   );
