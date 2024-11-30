@@ -5,7 +5,7 @@ const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
 export const mainStyles = StyleSheet.create({
   header: {
     paddingVertical: 16,
-    flex: 0.5,
+    flex: 0.3,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
@@ -17,6 +17,11 @@ export const mainStyles = StyleSheet.create({
   cityName: {
     fontSize: 32,
     fontWeight: 600,
+  },
+  menuBox: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
   },
 
   scroll: {},
@@ -84,36 +89,11 @@ export const mainStyles = StyleSheet.create({
     fontSize: 32,
   },
 
-  menuContainer: {
-    width: SCREEN_WIDTH,
-    height: SCREEN_HEIGHT - 64,
+  chatBtn: {
     position: "absolute",
-    top: 0,
-    left: 0,
-    zIndex: 99,
-    backgroundColor: "rgba(0,0,0,0.9)",
-  },
-  cityList: {
-    padding: 16,
-  },
-  city: {
-    padding: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: "#fff",
-  },
-  cityText: {
-    fontSize: 20,
-    fontWeight: 600,
-    color: "#fff",
-    textAlign: "center",
-  },
-  menuCloseBtn: {
-    position: "absolute",
-    bottom: 20,
-    right: 20,
-    backgroundColor: "transparent",
-    zIndex: 100,
-    borderWidth: 1,
-    borderColor: "#fff",
+    bottom: 16,
+    right: 16,
+    zIndex: 9,
+    borderRadius: 100,
   },
 });

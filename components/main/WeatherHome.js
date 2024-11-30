@@ -6,18 +6,20 @@ import WeatherSection from "./WeatherSection";
 import MainHeader from "./MainHeader";
 import { useNavigation } from "@react-navigation/native";
 import { globalStyles } from "../../style/globalStyle";
-import CityMenu from "./CityMenu";
+import CityMenu from "../menu/CityMenu";
+import { mainStyles } from "../../style/mainStyle";
 import CustomButton from "../custom/CustomButton";
-
-import ChatIcon from "../../icon/chat.svg";
+import AiChatIcon from "../../icon/ai-chat.svg";
+import SideMenu from "../menu/SideMenu";
 
 const WeatherHome = () => {
   const navigation = useNavigation();
 
-  const [showMenu, setShowMenu] = useState(false);
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
   const [userLocation, setUserLocation] = useState(null);
+  const [showCityMenu, setShowCityMenu] = useState(false);
+  const [showSideMenu, setShowSideMenu] = useState(false);
 
   const getUserLocation = async () => {
     const { granted } = await Location.requestForegroundPermissionsAsync();
@@ -69,7 +71,8 @@ const WeatherHome = () => {
       <MainHeader
         isLoading={isLoading}
         address={address}
-        setShowMenu={setShowMenu}
+        setShowCityMenu={setShowCityMenu}
+        setShowSideMenu={setShowSideMenu}
       />
       {isLoading ? (
         <View style={globalStyles.container}>
@@ -80,19 +83,24 @@ const WeatherHome = () => {
           <WeatherSection days={days} />
           <CustomButton
             onPress={naviToChat}
-            imageSource={ChatIcon}
+            imageSource={AiChatIcon}
             iconSize={"big"}
-            style={{
-              position: "absolute",
-              bottom: 16,
-              right: 16,
-              zIndex: 9,
-            }}
+            style={mainStyles.chatBtn}
           />
         </>
       )}
-      {showMenu && (
-        <CityMenu setShowMenu={setShowMenu} cityLocation={cityLocation} />
+      {showCityMenu && (
+        <CityMenu
+          showCityMenu={showCityMenu}
+          setShowCityMenu={setShowCityMenu}
+          cityLocation={cityLocation}
+        />
+      )}
+      {showSideMenu && (
+        <SideMenu
+          showSideMenu={showSideMenu}
+          setShowSideMenu={setShowSideMenu}
+        />
       )}
     </View>
   );
