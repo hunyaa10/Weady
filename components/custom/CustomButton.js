@@ -1,15 +1,11 @@
 import React from "react";
-import { TouchableOpacity, Text, StyleSheet, Image } from "react-native";
-import { globalStyles } from "../../style/globalStyle";
+import { TouchableOpacity, Text, StyleSheet } from "react-native";
 
-const CustomButton = ({ onPress, text, imageSource, style, iconSize }) => {
-  const iconStyle =
-    iconSize === "big" ? globalStyles.bigIcon : globalStyles.smallIcon;
-
+const CustomButton = ({ onPress, text, style, children }) => {
   return (
     <TouchableOpacity style={[styles.button, style]} onPress={onPress}>
-      {imageSource ? (
-        <Image source={imageSource} style={iconStyle} />
+      {children ? (
+        children
       ) : (
         <Text style={[styles.buttonText, style?.text]}>{text}</Text>
       )}

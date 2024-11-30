@@ -4,10 +4,10 @@ import { mainStyles } from "../../style/mainStyle";
 import { globalStyles } from "../../style/globalStyle";
 
 // 날씨아이콘
-import SunnyIcon from "../../icon/icons8-맑음-32.png";
-import CloudIcon from "../../icon/icons8-구름-32.png";
-import RainIcon from "../../icon/icons8-비-32.png";
-import SnowIcon from "../../icon/icons8-눈-32.png";
+import SunnyIcon from "../../assets/icons8-맑음-32.png";
+import CloudIcon from "../../assets/icons8-구름-32.png";
+import RainIcon from "../../assets/icons8-비-32.png";
+import SnowIcon from "../../assets/icons8-눈-32.png";
 
 const TemperOfDate = ({ weatherData }) => {
   // console.log(weatherData);

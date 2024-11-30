@@ -11,10 +11,9 @@ import {
 import { chatStyles } from "../../style/chatStyle";
 import { globalStyles } from "../../style/globalStyle";
 import CustomButton from "../custom/CustomButton";
+import SendIcon from "../../assets/SendIcon";
 
-import SendIcon from "../../icon/send.svg";
-
-const ChatSection = ({ userLocation, userAddress, userWeathers }) => {
+const ChatSection = ({ userAddress, userWeathers }) => {
   // console.log(userAddress, userWeathers, Object.keys(userWeathers)[0]);
   const flatListRef = useRef();
 
@@ -110,11 +109,9 @@ const ChatSection = ({ userLocation, userAddress, userWeathers }) => {
           placeholder="질문을 입력하세요"
           onSubmitEditing={() => handleSubmit(inputValue)}
         />
-        <CustomButton
-          imageSource={SendIcon}
-          iconSize={"small"}
-          onPress={() => handleSubmit(inputValue)}
-        />
+        <CustomButton onPress={() => handleSubmit(inputValue)}>
+          <SendIcon />
+        </CustomButton>
       </View>
     </KeyboardAvoidingView>
   );
