@@ -10,12 +10,23 @@ import {
 import CustomButton from "../custom/CustomButton";
 import { menuStyles } from "../../style/menuStyle";
 
-const cityList = ["Seoul", "Daejeon", "Daegu", "Busan"];
+const cityList = [
+  "Seoul",
+  "Incheon",
+  "Daejeon",
+  "Daegu",
+  "Busan",
+  "Gwangju",
+  "Ulsan",
+];
 const cityCoordinates = {
   Seoul: { lat: 37.5665, lon: 126.978 },
+  Incheon: { lat: 37.4563, lon: 126.7052 },
   Daejeon: { lat: 36.3504, lon: 127.3845 },
   Daegu: { lat: 35.8714, lon: 128.6014 },
   Busan: { lat: 35.1796, lon: 129.0756 },
+  Gwangju: { lat: 35.1595, lon: 126.8526 },
+  Ulsan: { lat: 35.5397, lon: 129.3114 },
 };
 
 const SCREEN_HEIGHT = Dimensions.get("window").height;

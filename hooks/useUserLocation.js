@@ -32,11 +32,11 @@ const useUserLocation = async () => {
     getLocation();
   }, []);
 
-  useEffect(() => {
-    if (location) {
-      console.log("사용자위치: ", location); // ok
-    }
-  }, [location]);
+  // useEffect(() => {
+  //   if (location) {
+  //     console.log("사용자위치: ", location); // ok
+  //   }
+  // }, [location]);
 
   return { location, isLoading };
 };

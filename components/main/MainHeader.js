@@ -16,10 +16,10 @@ const MainHeader = ({
         {isLoading ? "loading..." : `${address}`}
       </Text>
       <View style={mainStyles.menuBox}>
-        <TouchableOpacity onPress={() => setShowCityMenu}>
+        <TouchableOpacity onPress={() => setShowCityMenu(true)}>
           <PinIcon />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => setShowSideMenu}>
+        <TouchableOpacity onPress={() => setShowSideMenu(true)}>
           <MenuIcon />
         </TouchableOpacity>
       </View>

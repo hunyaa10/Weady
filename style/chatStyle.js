@@ -18,11 +18,13 @@ export const chatStyles = StyleSheet.create({
     backgroundColor: "#C9E4EB",
     alignSelf: "flex-end",
     borderBottomEndRadius: 0,
+    marginBottom: 8,
   },
   aiMessage: {
     backgroundColor: "#fff",
     alignSelf: "flex-start",
     borderBottomStartRadius: 0,
+    marginBottom: 8,
   },
   messageText: {
     fontSize: 16,
@@ -54,5 +56,31 @@ export const chatStyles = StyleSheet.create({
     padding: 10,
     backgroundColor: "#0D819E",
     borderRadius: 10,
+  },
+
+  styleOptionsWrapper: {
+    width: "100%",
+    height: "auto",
+    padding: 16,
+    position: "absolute",
+    bottom: 80,
+    left: 0,
+    zIndex: 9,
+    backgroundColor: "#EDF1F4",
+  },
+  styleOptionsContainer: {
+    height: "auto",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    flexWrap: "wrap",
+    gap: 16,
+  },
+  styleOptionText: {
+    padding: 8,
+    borderRadius: 8,
+    backgroundColor: "#fff",
+    fontSize: 14,
+    fontWeight: 600,
+    textAlign: "center",
   },
 });
