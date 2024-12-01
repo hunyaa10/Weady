@@ -33,7 +33,7 @@ export const mainStyles = StyleSheet.create({
     justifyContent: "center",
   },
   week: {
-    fontSize: 48,
+    fontSize: 42,
     fontWeight: 600,
   },
   date: {
@@ -52,7 +52,7 @@ export const mainStyles = StyleSheet.create({
     alignItems: "center",
   },
   currentTemper: {
-    fontSize: 158,
+    fontSize: 120,
     fontWeight: 600,
   },
   scriptBox: {
@@ -70,12 +70,13 @@ export const mainStyles = StyleSheet.create({
   },
 
   temperBox: {
+    paddingHorizontal: 16,
     marginTop: "20%",
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "center",
     alignItems: "center",
-    gap: 40,
+    gap: 36,
   },
   temper: {
     alignItems: "center",

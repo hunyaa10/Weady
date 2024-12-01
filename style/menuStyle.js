@@ -25,6 +25,7 @@ export const menuStyles = StyleSheet.create({
     shadowOffset: { width: 0, height: -3 },
     shadowRadius: 10,
     elevation: 10,
+    paddingBottom: 120,
   },
   cityList: {
     padding: 16,

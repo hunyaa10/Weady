@@ -17,7 +17,7 @@ const WeatherHome = () => {
 
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
-  const [userLocation, setUserLocation] = useState(null);
+  // const [userLocation, setUserLocation] = useState(null);
   const [showCityMenu, setShowCityMenu] = useState(false);
   const [showSideMenu, setShowSideMenu] = useState(false);
 
@@ -30,7 +30,7 @@ const WeatherHome = () => {
           accuracy: 5,
         });
         // console.log(coords);
-        setUserLocation(coords);
+        // setUserLocation(coords);
         setLatitude(coords.latitude);
         setLongitude(coords.longitude);
       } catch (e) {
@@ -58,7 +58,7 @@ const WeatherHome = () => {
 
   const naviToChat = () => {
     navigation.navigate("Chat", {
-      userLocation: userLocation,
+      // userLocation: userLocation,
       userAddress: address,
       userWeathers: days,
     });

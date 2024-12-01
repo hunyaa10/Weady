@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import { OPEN_AI_API_KEY } from "@env";
 import {
   FlatList,
   KeyboardAvoidingView,
@@ -12,52 +11,17 @@ import { chatStyles } from "../../style/chatStyle";
 import { globalStyles } from "../../style/globalStyle";
 import CustomButton from "../custom/CustomButton";
 import SendIcon from "../../assets/SendIcon";
+import { getClothingRecommendation, getPersonalizedResponse } from "../../api";
+
+const styleList = ["캐주얼", "포멀", "스포티", "쿨", "빈티지", "페미닌"];
 
 const ChatSection = ({ userAddress, userWeathers }) => {
-  // console.log(userAddress, userWeathers, Object.keys(userWeathers)[0]);
   const flatListRef = useRef();
 
   const [inputValue, setInputValue] = useState("");
   const [messages, setMessages] = useState([]);
-
-  const getOpenAiResponse = async (userQuery) => {
-    const aiApiKey = OPEN_AI_API_KEY;
-
-    const dateInfo = `오늘 날짜는 ${Object.keys(userWeathers)[0]}입니다.`;
-    const locationInfo = `사용자가 살고있는 지역은 ${userAddress}입니다.`;
-    const weatherInfo = `사용자가 살고있는 지역의 날씨정보는 ${userWeathers}입니다. 오늘날짜를 기준으로 5일의 날씨정보를 가지고 있습니다.`;
-    const fullQuery = `
-      오늘 날짜: ${dateInfo},
-      사용자 위치 정보: ${locationInfo},
-      사용자 위치기준 날씨 정보: ${weatherInfo},
-      질문: ${userQuery}(복장관련질문이면 날씨정보를 기반으로 대답해. 날짜, 온도(섭씨기준), 바람, description이 중요한 정보야. 10년이상된 친구처럼 반말로 대답해줘)
-    `;
-
-    try {
-      const response = await fetch(
-        "https://api.openai.com/v1/chat/completions",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${aiApiKey}`,
-          },
-          body: JSON.stringify({
-            model: "gpt-3.5-turbo",
-            messages: [{ role: "user", content: fullQuery }],
-            max_tokens: 200,
-          }),
-        }
-      );
-
-      const data = await response.json();
-      // console.log(data.choices[0].message.content);
-      const answer = data.choices[0].message.content;
-      return answer;
-    } catch (e) {
-      console.log("AI응답을 가져오는 중 오류발생: ", e.message);
-    }
-  };
+  const [selectedStyle, setSelectedStyle] = useState("");
+  const [showStyleOptions, setShowStyleOptions] = useState(false);
 
   const handleSubmit = async (input) => {
     if (input.trim() === "") return;
@@ -67,10 +31,34 @@ const ChatSection = ({ userAddress, userWeathers }) => {
     setMessages((prev) => [...prev, userMsg]);
     setInputValue("");
 
-    const aiAnswer = await getOpenAiResponse(input);
+    // AI 응답
+    const aiAnswer = await getPersonalizedResponse(
+      input,
+      userAddress,
+      userWeathers
+    );
     // console.log(aiAnswer); //
     const aiMsg = { role: "assistant", content: aiAnswer };
     setMessages((prev) => [...prev, aiMsg]);
+
+    // 스타일선택 시 응답
+    if (
+      aiAnswer.includes("스타일") ||
+      aiAnswer.includes("옷") ||
+      aiAnswer.includes("선택") ||
+      aiAnswer.includes("추천")
+    ) {
+      setShowStyleOptions(true);
+    }
+  };
+
+  const handleStyleSelection = async (style) => {
+    // setSelectedStyle(style);
+    setShowStyleOptions(false);
+
+    const styleResponse = await getClothingRecommendation(style);
+    const styleMsg = { role: "assistant", content: styleResponse };
+    setMessages((prev) => [...prev, styleMsg]);
   };
 
   // 대화 내용 표시
@@ -113,6 +101,23 @@ const ChatSection = ({ userAddress, userWeathers }) => {
           <SendIcon />
         </CustomButton>
       </View>
+      {showStyleOptions && (
+        <View style={chatStyles.styleOptionsWrapper}>
+          <FlatList
+            data={styleList}
+            keyExtractor={(item) => item}
+            renderItem={({ item }) => (
+              <Text
+                style={chatStyles.styleOptionText}
+                onPress={() => handleStyleSelection(item)}
+              >
+                {item}
+              </Text>
+            )}
+            contentContainerStyle={chatStyles.styleOptionsContainer}
+          />
+        </View>
+      )}
     </KeyboardAvoidingView>
   );
 };
