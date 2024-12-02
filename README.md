@@ -1,6 +1,6 @@
 <div align="center">
   <h1>
-    <img src='https://github.com/user-attachments/assets/8a21c23e-c46c-4dd1-9be0-f6cb7b2b651a' display='inline' width='24px'/>
+    <img src='https://github.com/user-attachments/assets/d077d876-ed2e-4023-8b25-edf2666ee1a1' display='inline' width='24px'/>
     WEADY_웨디
   </h1>
   <br />
