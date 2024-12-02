@@ -59,21 +59,19 @@ export const chatStyles = StyleSheet.create({
   },
 
   styleOptionsWrapper: {
-    width: "100%",
+    width: SCREEN_WIDTH,
     height: "auto",
     padding: 16,
-    position: "absolute",
-    bottom: 80,
-    left: 0,
+    position: "relative",
+    bottom: 80 - 16,
+    left: -16,
     zIndex: 9,
     backgroundColor: "#EDF1F4",
   },
   styleOptionsContainer: {
-    height: "auto",
+    width: "100%",
     flexDirection: "row",
     justifyContent: "space-between",
-    flexWrap: "wrap",
-    gap: 16,
   },
   styleOptionText: {
     padding: 8,
