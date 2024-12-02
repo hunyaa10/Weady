@@ -31,11 +31,7 @@ export const fetchAiResponse = async (userQuery) => {
   }
 };
 
-export const getPersonalizedResponse = async (
-  userQuery,
-  userAddress,
-  userWeathers
-) => {
+export const getAutoResponse = async (userQuery, userAddress, userWeathers) => {
   const dateInfo = `오늘 날짜는 ${Object.keys(userWeathers)[0]}입니다.`;
   const locationInfo = `사용자가 살고있는 지역은 ${userAddress}입니다.`;
   const weatherInfo = `사용자가 살고있는 지역의 날씨정보는 ${JSON.stringify(
@@ -45,7 +41,7 @@ export const getPersonalizedResponse = async (
   const fullQuery = `
     오늘 날짜: ${dateInfo},
     사용자 위치 정보: ${locationInfo},
-    사용자 위치기준 날씨 정보: ${weatherInfo},
+    사용자 위치기준 날씨 정보: ${weatherInfo}(기온은 섭씨로 얘기해줘),
     질문: ${userQuery}
     대답규칙
     1. 복장 관련 질문일 경우 스타일을 선택하도록 대답해줘
@@ -57,18 +53,29 @@ export const getPersonalizedResponse = async (
 
   const aiResponse = await fetchAiResponse(fullQuery);
 
-  if (userQuery.includes("오늘 뭐 입지?")) {
-    return "원하는 스타일을 선택해: 캐주얼, 포멀, 스포티, 쿨, 빈티지, 페미닌";
-  }
-
   return aiResponse;
 };
 
-export const getClothingRecommendation = async (style) => {
+export const getResponseOfStyle = async (style) => {
   const styleQuery = `
   사용자가 선택한 스타일: ${style},
   대답규칙
   1. 사용자가 선택한 스타일에 맞는 옷을 **날씨랑 맞게** 추천해줘
+  2. 상의, 하의, 신발, 악세사리로 분류해서 대답해줘
+  3. 10년지기 친구처럼 **반말로** 대답해
+  4. **반드시** 존댓말은 사용하지 않도록 해.
+`;
+
+  const aiResponse = await fetchAiResponse(styleQuery);
+
+  return aiResponse;
+};
+
+export const getResponseOfArea = async (area) => {
+  const styleQuery = `
+  사용자가 참석예정인 장소: ${area},
+  대답규칙
+  1. 사용자가 참석할 **장소**에 맞는 옷을 **날씨랑 맞게** 추천해줘
   2. 상의, 하의, 신발, 악세사리로 분류해서 대답해줘
   3. 10년지기 친구처럼 **반말로** 대답해
   4. **반드시** 존댓말은 사용하지 않도록 해.

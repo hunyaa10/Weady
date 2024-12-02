@@ -11,16 +11,20 @@ import { chatStyles } from "../../style/chatStyle";
 import { globalStyles } from "../../style/globalStyle";
 import CustomButton from "../custom/CustomButton";
 import SendIcon from "../../assets/SendIcon";
-import { getClothingRecommendation, getPersonalizedResponse } from "../../api";
+import {
+  getResponseOfStyle,
+  getAutoResponse,
+  getResponseOfArea,
+} from "../../api";
 
 const styleList = ["캐주얼", "포멀", "스포티", "쿨", "빈티지", "페미닌"];
+const areaList = ["결혼식", "장례식", "상견례", "집들이", "면접"];
 
 const ChatSection = ({ userAddress, userWeathers }) => {
   const flatListRef = useRef();
 
   const [inputValue, setInputValue] = useState("");
   const [messages, setMessages] = useState([]);
-  const [selectedStyle, setSelectedStyle] = useState("");
   const [showStyleOptions, setShowStyleOptions] = useState(false);
 
   const handleSubmit = async (input) => {
@@ -31,32 +35,51 @@ const ChatSection = ({ userAddress, userWeathers }) => {
     setMessages((prev) => [...prev, userMsg]);
     setInputValue("");
 
-    // AI 응답
-    const aiAnswer = await getPersonalizedResponse(
-      input,
-      userAddress,
-      userWeathers
-    );
+    // 장소응답
+    const matchedArea = areaList.find((area) => input.includes(area));
+    if (matchedArea) {
+      const areaResponse = await getResponseOfArea(matchedArea);
+      setMessages((prev) => [
+        ...prev,
+        { role: "assistant", content: areaResponse },
+      ]);
+      return;
+    }
+
+    // 옷추천응답
+    if (
+      input.trim().includes("입지") ||
+      input.trim().includes("입고가지") ||
+      input.trim().includes("옷") ||
+      input.trim().includes("추천") ||
+      input.trim().includes("스타일")
+    ) {
+      const fixedAnswer = "어떤 스타일이 좋아?";
+      setMessages((prev) => [
+        ...prev,
+        { role: "assistant", content: fixedAnswer },
+      ]);
+      setShowStyleOptions(true);
+      return;
+    }
+
+    // 자동응답
+    const aiAnswer = await getAutoResponse(input, userAddress, userWeathers);
     // console.log(aiAnswer); //
     const aiMsg = { role: "assistant", content: aiAnswer };
     setMessages((prev) => [...prev, aiMsg]);
-
-    // 스타일선택 시 응답
-    if (
-      aiAnswer.includes("스타일") ||
-      aiAnswer.includes("옷") ||
-      aiAnswer.includes("선택") ||
-      aiAnswer.includes("추천")
-    ) {
-      setShowStyleOptions(true);
-    }
   };
 
   const handleStyleSelection = async (style) => {
-    // setSelectedStyle(style);
     setShowStyleOptions(false);
 
-    const styleResponse = await getClothingRecommendation(style);
+    const userStyleMsg = {
+      role: "user",
+      content: `${style}한 스타일 추천해줘`,
+    };
+    setMessages((prev) => [...prev, userStyleMsg]);
+
+    const styleResponse = await getResponseOfStyle(style);
     const styleMsg = { role: "assistant", content: styleResponse };
     setMessages((prev) => [...prev, styleMsg]);
   };
