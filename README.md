@@ -1,5 +1,5 @@
-<div align='center' width=400px>
-  ![스크린샷 2024-12-02 150950](https://github.com/user-attachments/assets/721ab7c1-5efc-4e12-94e9-14d910a1b02d)
+<div align='center'>
+  <img src='https://github.com/user-attachments/assets/721ab7c1-5efc-4e12-94e9-14d910a1b02d' width='400px'/>
 </div>
 <div align="center">
   <h1>
