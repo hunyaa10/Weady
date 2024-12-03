@@ -2,9 +2,17 @@ import { OPEN_AI_API_KEY } from "@env";
 
 const aiApiKey = OPEN_AI_API_KEY;
 
+// 공통 대답 규칙
+const responseRules = `
+  대답규칙:
+  1. 사용자가 복장이나 날씨를 묻지않으면 그에 관해 대답하지말고 일상대화를 해줘.
+  2. 복장 관련 질문일 경우 스타일을 선택하도록 대답해.
+  3. 사용자가 선택한 스타일 또는 장소에 맞는 옷을 **날씨랑 맞게** 추천해줘.
+`;
+
 export const fetchAiResponse = async (userQuery) => {
   const fullQuery = `
-    ${userQuery}
+    ${userQuery}, ${responseRules}
   `;
 
   try {
@@ -17,7 +25,7 @@ export const fetchAiResponse = async (userQuery) => {
       body: JSON.stringify({
         model: "gpt-3.5-turbo",
         messages: [{ role: "user", content: fullQuery }],
-        max_tokens: 500,
+        max_tokens: 300,
         temperature: 0.7,
       }),
     });
@@ -31,57 +39,65 @@ export const fetchAiResponse = async (userQuery) => {
   }
 };
 
-export const getAutoResponse = async (userQuery, userAddress, userWeathers) => {
-  const dateInfo = `오늘 날짜는 ${Object.keys(userWeathers)[0]}입니다.`;
-  const locationInfo = `사용자가 살고있는 지역은 ${userAddress}입니다.`;
-  const weatherInfo = `사용자가 살고있는 지역의 날씨정보는 ${JSON.stringify(
-    userWeathers
-  )}입니다. 오늘날짜를 기준으로 5일의 날씨정보를 가지고 있습니다.`;
+export const selectedAiStyleFromUser = (gender, character) => {
+  let responseStyle = [];
+  if (gender) {
+    responseStyle.push(`너의 성별은 ${gender}야.`);
+  }
+  // if (intimacy) {
+  //   responseStyle.push(
+  //     `ai와 사용자의 친밀도는 5점 만점에 ${intimacy}점이야.`
+  //     // `3점이하일 경우 ai는 존댓말을 사용하고, 4점이상일 경우 반말을 사용해서 대답해.`
+  //   );
+  // }
+  if (character) {
+    responseStyle.push(
+      `너의 성격은 ${character} 성격이야. **성격에 맞게** 대답해.`
+    );
+    if (character === "예의없는") {
+      responseStyle.push("너는 무례한 태도를 가지고 반말로 대답해야해");
+    }
+  }
 
-  const fullQuery = `
+  // console.log("지정한 ai스타일:", responseStyle.join(", "));
+  return responseStyle.join(", ");
+};
+
+export const getAutoResponse = async (
+  userQuery,
+  userAddress,
+  userWeathers,
+  matchedArea = "",
+  matchedStyle = "",
+  aiStyleOptions = {}
+) => {
+  const { gender, character } = aiStyleOptions;
+
+  const dateInfo = `오늘 날짜는 ${Object.keys(userWeathers)[0]}야`;
+  const locationInfo = `사용자가 살고있는 지역은 ${userAddress}야`;
+  const weatherInfo = `사용자가 살고있는 지역의 날씨정보는 ${userWeathers}야. 오늘날짜를 기준으로 5일의 날씨정보를 가지고 있어.`;
+  const aiStyle = selectedAiStyleFromUser(gender, character);
+
+  const baseQuery = `
     오늘 날짜: ${dateInfo},
     사용자 위치 정보: ${locationInfo},
-    사용자 위치기준 날씨 정보: ${weatherInfo}(기온은 섭씨로 얘기해줘),
+    사용자 위치기준 날씨 정보: ${weatherInfo}(기온은 **섭씨**로 얘기해),
     질문: ${userQuery}
-    대답규칙
-    1. 복장 관련 질문일 경우 스타일을 선택하도록 대답해줘
-    2. 스타일종류는 캐주얼, 포멀, 스포티, 쿨, 빈티지, 페미닌이야
-    3. 날씨만 물으면 날씨만 대답해
-    4. 10년지기 친구처럼 **반말로** 대답해
-    5. **반드시** 존댓말은 사용하지 않도록 해.
+    대답하는 ai답변 스타일: ${aiStyle}
   `;
 
-  const aiResponse = await fetchAiResponse(fullQuery);
+  let finalQuery = baseQuery;
 
-  return aiResponse;
-};
+  if (matchedArea !== "") {
+    finalQuery = `${baseQuery}, 사용자가 참석예정인 장소: ${matchedArea}`;
+  }
 
-export const getResponseOfStyle = async (style) => {
-  const styleQuery = `
-  사용자가 선택한 스타일: ${style},
-  대답규칙
-  1. 사용자가 선택한 스타일에 맞는 옷을 **날씨랑 맞게** 추천해줘
-  2. 상의, 하의, 신발, 악세사리로 분류해서 대답해줘
-  3. 10년지기 친구처럼 **반말로** 대답해
-  4. **반드시** 존댓말은 사용하지 않도록 해.
-`;
+  if (matchedStyle !== "") {
+    finalQuery = `${baseQuery}, 사용자가 선택한 스타일: ${matchedStyle}`;
+  }
 
-  const aiResponse = await fetchAiResponse(styleQuery);
+  // console.log(finalQuery);
 
-  return aiResponse;
-};
-
-export const getResponseOfArea = async (area) => {
-  const styleQuery = `
-  사용자가 참석예정인 장소: ${area},
-  대답규칙
-  1. 사용자가 참석할 **장소**에 맞는 옷을 **날씨랑 맞게** 추천해줘
-  2. 상의, 하의, 신발, 악세사리로 분류해서 대답해줘
-  3. 10년지기 친구처럼 **반말로** 대답해
-  4. **반드시** 존댓말은 사용하지 않도록 해.
-`;
-
-  const aiResponse = await fetchAiResponse(styleQuery);
-
+  const aiResponse = await fetchAiResponse(finalQuery);
   return aiResponse;
 };

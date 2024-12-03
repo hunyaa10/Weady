@@ -8,7 +8,6 @@ import { useNavigation } from "@react-navigation/native";
 import { globalStyles } from "../../style/globalStyle";
 import CityMenu from "../menu/CityMenu";
 import { mainStyles } from "../../style/mainStyle";
-import SideMenu from "../menu/SideMenu";
 import CustomButton from "../custom/CustomButton";
 import AiChatIcon from "../../assets/AiChatIcon";
 
@@ -17,9 +16,7 @@ const WeatherHome = () => {
 
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
-  // const [userLocation, setUserLocation] = useState(null);
   const [showCityMenu, setShowCityMenu] = useState(false);
-  const [showSideMenu, setShowSideMenu] = useState(false);
 
   const getUserLocation = async () => {
     const { granted } = await Location.requestForegroundPermissionsAsync();
@@ -30,7 +27,6 @@ const WeatherHome = () => {
           accuracy: 5,
         });
         // console.log(coords);
-        // setUserLocation(coords);
         setLatitude(coords.latitude);
         setLongitude(coords.longitude);
       } catch (e) {
@@ -57,8 +53,7 @@ const WeatherHome = () => {
   };
 
   const naviToChat = () => {
-    navigation.navigate("Chat", {
-      // userLocation: userLocation,
+    navigation.navigate("ChatSetting", {
       userAddress: address,
       userWeathers: days,
     });
@@ -72,7 +67,6 @@ const WeatherHome = () => {
         isLoading={isLoading}
         address={address}
         setShowCityMenu={setShowCityMenu}
-        setShowSideMenu={setShowSideMenu}
       />
       {isLoading ? (
         <View style={globalStyles.container}>
@@ -91,12 +85,6 @@ const WeatherHome = () => {
           showCityMenu={showCityMenu}
           setShowCityMenu={setShowCityMenu}
           cityLocation={cityLocation}
-        />
-      )}
-      {showSideMenu && (
-        <SideMenu
-          showSideMenu={showSideMenu}
-          setShowSideMenu={setShowSideMenu}
         />
       )}
     </View>
