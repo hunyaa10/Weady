@@ -30,6 +30,7 @@ export const settingStyles = StyleSheet.create({
   },
   options: {
     flexDirection: "row",
+    flexWrap: "wrap",
     alignItems: "center",
     gap: 16,
   },
@@ -64,6 +65,7 @@ export const settingStyles = StyleSheet.create({
   setBtn: {
     width: SCREEN_WIDTH - 32,
     position: "absolute",
+    left: 16,
     bottom: 16,
   },
 });

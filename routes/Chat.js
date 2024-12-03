@@ -3,7 +3,7 @@ import ChatRoom from "../components/ai-chat/ChatRoom";
 
 const Chat = ({ route }) => {
   const { userAddress, userWeathers, aiStyleOptions } = route.params;
-  // console.log(aiStyleOptions);
+  // console.log(userWeathers);
 
   return (
     <ChatRoom
