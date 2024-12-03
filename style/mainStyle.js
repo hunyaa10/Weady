@@ -5,12 +5,12 @@ const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
 export const mainStyles = StyleSheet.create({
   header: {
     paddingVertical: 16,
-    flex: 0.3,
+    height: 80,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    borderBottomColor: "#000",
-    borderBottomWidth: 3,
+    borderBottomColor: "#333",
+    borderBottomWidth: 2,
     marginBottom: 16,
     position: "relative",
   },

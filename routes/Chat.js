@@ -1,10 +1,17 @@
 import React from "react";
-import ChatSection from "../components/ai-chat/ChatSection";
+import ChatRoom from "../components/ai-chat/ChatRoom";
 
 const Chat = ({ route }) => {
-  const { userAddress, userWeathers } = route.params;
+  const { userAddress, userWeathers, aiStyleOptions } = route.params;
+  // console.log(aiStyleOptions);
 
-  return <ChatSection userAddress={userAddress} userWeathers={userWeathers} />;
+  return (
+    <ChatRoom
+      userAddress={userAddress}
+      userWeathers={userWeathers}
+      aiStyleOptions={aiStyleOptions}
+    />
+  );
 };
 
 export default Chat;

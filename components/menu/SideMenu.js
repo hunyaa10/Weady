@@ -9,11 +9,13 @@ import {
 } from "react-native";
 import { menuStyles } from "../../style/menuStyle";
 import CustomButton from "../custom/CustomButton";
+import { useNavigation } from "@react-navigation/native";
 
 const menuList = ["채팅봇설정", "내프로필"];
 const SCREEN_WIDTH = Dimensions.get("window").width;
 
 const SideMenu = ({ showSideMenu, setShowSideMenu }) => {
+  const navigation = useNavigation();
   const translateX = useRef(new Animated.Value(SCREEN_WIDTH)).current;
 
   useEffect(() => {
@@ -34,6 +36,10 @@ const SideMenu = ({ showSideMenu, setShowSideMenu }) => {
     }
   }, [showSideMenu, translateX]);
 
+  const naviToChatSetting = () => {
+    navigation.navigate("ChatSetting");
+  };
+
   return (
     <Animated.View
       style={[
@@ -43,7 +49,7 @@ const SideMenu = ({ showSideMenu, setShowSideMenu }) => {
         },
       ]}
     >
-      <FlatList
+      {/* <FlatList
         style={menuStyles.menuList}
         data={menuList}
         renderItem={({ item }) => (
@@ -52,7 +58,14 @@ const SideMenu = ({ showSideMenu, setShowSideMenu }) => {
           </View>
         )}
         keyExtractor={(item, index) => index.toString()}
-      />
+      /> */}
+      <View style={menuStyles.menuList}>
+        <View style={menuStyles.menu}>
+          <Text style={menuStyles.menuText} onPress={naviToChatSetting}>
+            채팅봇 설정
+          </Text>
+        </View>
+      </View>
       <CustomButton
         onPress={() => setShowSideMenu(false)}
         text="CLOSE"

@@ -68,6 +68,13 @@ export const chatStyles = StyleSheet.create({
     zIndex: 9,
     backgroundColor: "#EDF1F4",
   },
+  styleOptionTitle: {
+    marginBottom: 16,
+    textAlign: "center",
+    fontSize: 16,
+    fontWeight: 600,
+    color: "#0D819E",
+  },
   styleOptionsContainer: {
     width: "100%",
     flexDirection: "row",

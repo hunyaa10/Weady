@@ -3,6 +3,7 @@ import Chat from "./routes/Chat";
 import Home from "./routes/Home";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
+import ChatSetting from "./routes/ChatSetting";
 
 export default function App() {
   const Stack = createStackNavigator();
@@ -22,6 +23,13 @@ export default function App() {
           component={Chat}
           options={{
             title: "채팅",
+          }}
+        />
+        <Stack.Screen
+          name="ChatSetting"
+          component={ChatSetting}
+          options={{
+            headerShown: false,
           }}
         />
       </Stack.Navigator>

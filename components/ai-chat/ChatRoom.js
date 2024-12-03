@@ -11,16 +11,13 @@ import { chatStyles } from "../../style/chatStyle";
 import { globalStyles } from "../../style/globalStyle";
 import CustomButton from "../custom/CustomButton";
 import SendIcon from "../../assets/SendIcon";
-import {
-  getResponseOfStyle,
-  getAutoResponse,
-  getResponseOfArea,
-} from "../../api";
+import { getAutoResponse } from "../../api";
 
 const styleList = ["캐주얼", "포멀", "스포티", "쿨", "빈티지", "페미닌"];
 const areaList = ["결혼식", "장례식", "상견례", "집들이", "면접"];
 
-const ChatSection = ({ userAddress, userWeathers }) => {
+const ChatRoom = ({ userAddress, userWeathers, aiStyleOptions }) => {
+  // console.log(aiStyleOptions); // ok
   const flatListRef = useRef();
 
   const [inputValue, setInputValue] = useState("");
@@ -28,6 +25,7 @@ const ChatSection = ({ userAddress, userWeathers }) => {
   const [showStyleOptions, setShowStyleOptions] = useState(false);
 
   const handleSubmit = async (input) => {
+    // console.log("submit 확인", aiStyleOptions); // ok
     if (input.trim() === "") return;
 
     const userMsg = { role: "user", content: input };
@@ -38,50 +36,62 @@ const ChatSection = ({ userAddress, userWeathers }) => {
     // 장소응답
     const matchedArea = areaList.find((area) => input.includes(area));
     if (matchedArea) {
-      const areaResponse = await getResponseOfArea(matchedArea);
+      const aiAnswer = await getAutoResponse(
+        input,
+        userAddress,
+        userWeathers,
+        matchedArea,
+        "",
+        aiStyleOptions
+      );
       setMessages((prev) => [
         ...prev,
-        { role: "assistant", content: areaResponse },
+        { role: "assistant", content: aiAnswer },
       ]);
       return;
     }
 
+    const aiAnswer = await getAutoResponse(
+      input,
+      userAddress,
+      userWeathers,
+      "",
+      "",
+      aiStyleOptions
+    );
+    // console.log(aiAnswer); //
+    setMessages((prev) => [...prev, { role: "assistant", content: aiAnswer }]);
+
     // 옷추천응답
-    if (
-      input.trim().includes("입지") ||
-      input.trim().includes("입고가지") ||
-      input.trim().includes("옷") ||
-      input.trim().includes("추천") ||
-      input.trim().includes("스타일")
-    ) {
-      const fixedAnswer = "어떤 스타일이 좋아?";
-      setMessages((prev) => [
-        ...prev,
-        { role: "assistant", content: fixedAnswer },
-      ]);
+    const clothingKeywords = ["스타일", "옷", "입고", "추천"];
+    const isClothingAnswer = clothingKeywords.some((keyword) =>
+      aiAnswer.includes(keyword)
+    );
+
+    if (isClothingAnswer) {
       setShowStyleOptions(true);
       return;
     }
-
-    // 자동응답
-    const aiAnswer = await getAutoResponse(input, userAddress, userWeathers);
-    // console.log(aiAnswer); //
-    const aiMsg = { role: "assistant", content: aiAnswer };
-    setMessages((prev) => [...prev, aiMsg]);
   };
 
-  const handleStyleSelection = async (style) => {
+  const handleStyleSelection = async (userStyle) => {
     setShowStyleOptions(false);
 
     const userStyleMsg = {
       role: "user",
-      content: `${style}한 스타일 추천해줘`,
+      content: `${userStyle}한 스타일 추천해줘`,
     };
     setMessages((prev) => [...prev, userStyleMsg]);
 
-    const styleResponse = await getResponseOfStyle(style);
-    const styleMsg = { role: "assistant", content: styleResponse };
-    setMessages((prev) => [...prev, styleMsg]);
+    const aiAnswer = await getAutoResponse(
+      `${userStyle}한 스타일 추천해줘`,
+      userAddress,
+      userWeathers,
+      "",
+      userStyle,
+      aiStyleOptions
+    );
+    setMessages((prev) => [...prev, { role: "assistant", content: aiAnswer }]);
   };
 
   // 대화 내용 표시
@@ -126,6 +136,9 @@ const ChatSection = ({ userAddress, userWeathers }) => {
       </View>
       {showStyleOptions && (
         <View style={chatStyles.styleOptionsWrapper}>
+          <Text style={chatStyles.styleOptionTitle}>
+            원하는 스타일을 선택하세요
+          </Text>
           <FlatList
             data={styleList}
             keyExtractor={(item) => item}
@@ -145,4 +158,4 @@ const ChatSection = ({ userAddress, userWeathers }) => {
   );
 };
 
-export default ChatSection;
+export default ChatRoom;
