@@ -10,8 +10,8 @@ const AiChatStyle = ({ userAddress, userWeathers }) => {
   const navigation = useNavigation();
 
   const [selectedGender, setSelectedGender] = useState(null);
-  const [selectedIntimacy, setSelectedIntimacy] = useState(null);
   const [selectedCharacter, setSelectedCharacter] = useState(null);
+  const [selectedType, setSelectedType] = useState(null);
   const [errorMsg, setErrorMsg] = useState("");
 
   const naviToHome = () => {
@@ -25,13 +25,6 @@ const AiChatStyle = ({ userAddress, userWeathers }) => {
       setSelectedGender(null);
     }
   };
-  const handleSeletintimacy = (intimacy) => {
-    if (selectedIntimacy !== intimacy) {
-      setSelectedIntimacy(intimacy);
-    } else {
-      setSelectedIntimacy(null);
-    }
-  };
   const handleSeletCharacter = (character) => {
     if (selectedCharacter !== character) {
       setSelectedCharacter(character);
@@ -39,18 +32,26 @@ const AiChatStyle = ({ userAddress, userWeathers }) => {
       setSelectedCharacter(null);
     }
   };
+  const handleSeletType = (type) => {
+    if (selectedType !== type) {
+      setSelectedType(type);
+    } else {
+      setSelectedType(null);
+    }
+  };
 
-  const handleSubmitOfAiStyle = (gender, intimacy, character) => {
-    if (!selectedGender || !selectedCharacter) {
+  const handleSubmitOfAiStyle = (gender, character, type) => {
+    if (!selectedGender || !selectedCharacter || !selectedType) {
       setErrorMsg("모든 설정을 완료해주세요");
       return;
+    } else {
+      navigation.navigate("Chat", {
+        userAddress,
+        userWeathers,
+        aiStyleOptions: { gender, character, type },
+      });
+      setErrorMsg("");
     }
-
-    navigation.navigate("Chat", {
-      userAddress,
-      userWeathers,
-      aiStyleOptions: { gender, character },
-    });
   };
 
   return (
@@ -88,25 +89,23 @@ const AiChatStyle = ({ userAddress, userWeathers }) => {
             ))}
           </View>
         </View>
-        {/* 
+
         <View style={settingStyles.optionGroup}>
-          <Text style={settingStyles.optionTitle}>친밀도</Text>
+          <Text style={settingStyles.optionTitle}>말투</Text>
           <View style={settingStyles.options}>
-            {[1, 2, 3, 4, 5].map((value) => (
+            {["존댓말", "반말"].map((value) => (
               <TouchableOpacity
                 key={value}
                 style={[
                   settingStyles.option,
-                  selectedIntimacy === String(value) &&
-                    settingStyles.selectedOption,
+                  selectedType === value && settingStyles.selectedOption,
                 ]}
-                onPress={() => handleSeletintimacy(String(value))}
+                onPress={() => handleSeletType(value)}
               >
                 <Text
                   style={[
                     settingStyles.optionText,
-                    selectedIntimacy === String(value) &&
-                      settingStyles.selectedOptionText,
+                    selectedType === value && settingStyles.selectedOptionText,
                   ]}
                 >
                   {value}
@@ -114,12 +113,20 @@ const AiChatStyle = ({ userAddress, userWeathers }) => {
               </TouchableOpacity>
             ))}
           </View>
-        </View> */}
+        </View>
 
         <View style={settingStyles.optionGroup}>
           <Text style={settingStyles.optionTitle}>성격</Text>
           <View style={settingStyles.options}>
-            {["소심한", "친절한", "쿨한", "예의없는"].map((value) => (
+            {[
+              "친절한",
+              "소심한",
+              "진지한",
+              "친근한",
+              "예의없는",
+              "유머있는",
+              "우울한",
+            ].map((value) => (
               <TouchableOpacity
                 key={value}
                 style={[
@@ -150,7 +157,9 @@ const AiChatStyle = ({ userAddress, userWeathers }) => {
       <CustomButton
         text="설정하기"
         style={settingStyles.setBtn}
-        onPress={() => handleSubmitOfAiStyle(selectedGender, selectedCharacter)}
+        onPress={() =>
+          handleSubmitOfAiStyle(selectedGender, selectedCharacter, selectedType)
+        }
       />
     </View>
   );
