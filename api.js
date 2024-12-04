@@ -5,11 +5,10 @@ const aiApiKey = OPEN_AI_API_KEY;
 // 공통 대답 규칙
 const responseRules = `
   대답규칙:
-  1. 내가 복장이나 날씨를 묻지않으면 그에 관해 대답하지말고 일상대화를 해줘.
-  2. 내가 날씨를 물으면 기온(섭씨), 바람, 햇빛을 기준으로 대답해.
-  3. 복장 관련 질문일 경우 스타일을 선택하도록 대답해.
-  4. 내가 선택한 스타일 또는 장소에 맞는 옷을 **날씨랑 맞게** 추천해줘.
-  5. **'대답:'이라는 표현을 사용하지마.** 모든 응답은 바로 답변이 시작되야해.
+  1. 날씨나 복장 관련 질문이 없으면 일상적인 대화를 나눈다.
+  2. 날씨를 물으면 **기온(섭씨), 바람, 햇빛**을 기준으로 대답한다.
+  3. 복장 관련 질문을 하면, 내가 스타일을 선택할 수 있도록 돕는다.
+  4. 내가 선택한 스타일이나 장소에 맞는 옷을 **날씨에 맞게** 추천해준다.
 `;
 
 export const fetchAiResponse = async (userQuery) => {
@@ -41,7 +40,7 @@ export const fetchAiResponse = async (userQuery) => {
   }
 };
 
-export const selectedAiStyleFromUser = (gender, character, type) => {
+export const selectedAiStyleForUser = (gender, character, type) => {
   let responseStyle = [];
   if (gender) {
     responseStyle.push(`너의 성별은 ${gender}야.`);
@@ -83,7 +82,7 @@ export const selectedAiStyleFromUser = (gender, character, type) => {
   return responseStyle.join(", ");
 };
 
-export const getAutoResponse = async (
+export const getAiResponse = async (
   userQuery,
   userAddress,
   userWeathers,
@@ -96,7 +95,7 @@ export const getAutoResponse = async (
   const dateInfo = `오늘 날짜는 ${Object.keys(userWeathers)[0]}야`;
   const locationInfo = `내가 살고있는 지역은 ${userAddress}야`;
   const weatherInfo = `내가 살고있는 지역의 날씨정보는 ${userWeathers}야`;
-  const aiStyle = selectedAiStyleFromUser(gender, character, type);
+  const aiStyle = selectedAiStyleForUser(gender, character, type);
 
   const baseQuery = `
     ${userQuery}
