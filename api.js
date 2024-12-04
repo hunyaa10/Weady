@@ -51,7 +51,7 @@ export const selectedAiStyleForUser = (gender, character, type) => {
   if (character) {
     if (character === "예의없는") {
       responseStyle.push(
-        "너는 예의없는 성격을 가진 AI야. 내 감정을 고려하지 않고, **부정적이고 불친절하며** 직설적인 표현을 사용해서 짧게 대답해."
+        "너는 예의없는 성격을 가진 AI야. 내 감정을 고려하지 않고, **부정적이고 불친절하며** 직설적인 표현을 사용해서 짧게 대답해. 미안한 감정도 느끼지마."
       );
     } else if (character === "소심한") {
       responseStyle.push(
@@ -94,7 +94,9 @@ export const getAiResponse = async (
 
   const dateInfo = `오늘 날짜는 ${Object.keys(userWeathers)[0]}야`;
   const locationInfo = `내가 살고있는 지역은 ${userAddress}야`;
-  const weatherInfo = `내가 살고있는 지역의 날씨정보는 ${userWeathers}야`;
+  const weatherInfo = `내가 살고있는 지역의 날씨정보는 ${JSON.stringify(
+    userWeathers
+  )}야. 기온은 *'temp - 273.15'*로 바꿔서 얘기해줘.`;
   const aiStyle = selectedAiStyleForUser(gender, character, type);
 
   const baseQuery = `
