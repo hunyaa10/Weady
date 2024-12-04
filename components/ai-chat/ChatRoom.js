@@ -11,13 +11,12 @@ import { chatStyles } from "../../style/chatStyle";
 import { globalStyles } from "../../style/globalStyle";
 import CustomButton from "../custom/CustomButton";
 import SendIcon from "../../assets/SendIcon";
-import { getAutoResponse } from "../../api";
+import { getAiResponse } from "../../api";
 
 const styleList = ["캐주얼", "포멀", "스포티", "쿨", "빈티지", "페미닌"];
 const areaList = ["결혼식", "장례식", "상견례", "집들이", "면접"];
 
 const ChatRoom = ({ userAddress, userWeathers, aiStyleOptions }) => {
-  // console.log(aiStyleOptions); // ok
   const flatListRef = useRef();
 
   const [inputValue, setInputValue] = useState("");
@@ -25,18 +24,16 @@ const ChatRoom = ({ userAddress, userWeathers, aiStyleOptions }) => {
   const [showStyleOptions, setShowStyleOptions] = useState(false);
 
   const handleSubmit = async (input) => {
-    // console.log("submit 확인", aiStyleOptions); // ok
     if (input.trim() === "") return;
 
     const userMsg = { role: "user", content: input };
-    // console.log(userMsg); //
     setMessages((prev) => [...prev, userMsg]);
     setInputValue("");
 
     // 장소응답
     const matchedArea = areaList.find((area) => input.includes(area));
     if (matchedArea) {
-      const aiAnswer = await getAutoResponse(
+      const aiAnswer = await getAiResponse(
         input,
         userAddress,
         userWeathers,
@@ -44,14 +41,12 @@ const ChatRoom = ({ userAddress, userWeathers, aiStyleOptions }) => {
         "",
         aiStyleOptions
       );
-      setMessages((prev) => [
-        ...prev,
-        { role: "assistant", content: aiAnswer },
-      ]);
+      const aiMsg = { role: "ai", content: aiAnswer };
+      setMessages((prev) => [...prev, aiMsg]);
       return;
     }
 
-    const aiAnswer = await getAutoResponse(
+    const aiAnswer = await getAiResponse(
       input,
       userAddress,
       userWeathers,
@@ -59,8 +54,8 @@ const ChatRoom = ({ userAddress, userWeathers, aiStyleOptions }) => {
       "",
       aiStyleOptions
     );
-    // console.log(aiAnswer); //
-    setMessages((prev) => [...prev, { role: "assistant", content: aiAnswer }]);
+    const aiMsg = { role: "ai", content: aiAnswer };
+    setMessages((prev) => [...prev, aiMsg]);
 
     // 옷추천응답
     const clothingKeywords = ["스타일", "옷", "입고", "추천"];
@@ -83,7 +78,7 @@ const ChatRoom = ({ userAddress, userWeathers, aiStyleOptions }) => {
     };
     setMessages((prev) => [...prev, userStyleMsg]);
 
-    const aiAnswer = await getAutoResponse(
+    const aiAnswer = await getAiResponse(
       `${userStyle}한 스타일 추천해줘`,
       userAddress,
       userWeathers,
@@ -91,10 +86,10 @@ const ChatRoom = ({ userAddress, userWeathers, aiStyleOptions }) => {
       userStyle,
       aiStyleOptions
     );
-    setMessages((prev) => [...prev, { role: "assistant", content: aiAnswer }]);
+    const aiMsg = { role: "ai", content: aiAnswer };
+    setMessages((prev) => [...prev, aiMsg]);
   };
 
-  // 대화 내용 표시
   const renderItem = ({ item }) => (
     <View
       style={[
@@ -105,7 +100,7 @@ const ChatRoom = ({ userAddress, userWeathers, aiStyleOptions }) => {
       <Text style={chatStyles.messageText}>{item.content}</Text>
     </View>
   );
-  // 메세지스크롤 가장하단으로
+
   useEffect(() => {
     flatListRef.current?.scrollToEnd({ animated: true });
   }, [messages]);
@@ -122,6 +117,7 @@ const ChatRoom = ({ userAddress, userWeathers, aiStyleOptions }) => {
         keyExtractor={(item, index) => index.toString()}
         style={chatStyles.messagesList}
       />
+
       <View style={chatStyles.inputContainer}>
         <TextInput
           style={chatStyles.userInput}
@@ -134,6 +130,7 @@ const ChatRoom = ({ userAddress, userWeathers, aiStyleOptions }) => {
           <SendIcon />
         </CustomButton>
       </View>
+
       {showStyleOptions && (
         <View style={chatStyles.styleOptionsWrapper}>
           <Text style={chatStyles.styleOptionTitle}>
