@@ -6,7 +6,7 @@ export const chatStyles = StyleSheet.create({
   messagesList: {
     flex: 1,
     width: SCREEN_WIDTH - 32,
-    marginBottom: 80,
+    marginBottom: 60,
   },
   messageContainer: {
     maxWidth: "80%",
@@ -32,11 +32,11 @@ export const chatStyles = StyleSheet.create({
 
   inputContainer: {
     width: SCREEN_WIDTH,
-    height: 80,
+    height: 70,
+    paddingHorizontal: 8,
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center",
-    gap: 8,
+    justifyContent: "space-between",
     backgroundColor: "#fff",
     position: "absolute",
     bottom: 0,
@@ -44,9 +44,9 @@ export const chatStyles = StyleSheet.create({
     zIndex: 99,
   },
   userInput: {
-    width: "80%",
+    width: "75%",
     height: 40,
-    borderColor: "gray",
+    borderColor: "#c8c8c8",
     borderWidth: 1,
     borderRadius: 8,
     paddingLeft: 8,
@@ -57,13 +57,18 @@ export const chatStyles = StyleSheet.create({
     backgroundColor: "#0D819E",
     borderRadius: 10,
   },
+  inputBtn: {
+    padding: 5,
+    backgroundColor: "#0D819E10",
+    borderRadius: 50,
+  },
 
   styleOptionsWrapper: {
     width: SCREEN_WIDTH,
     height: "auto",
     padding: 16,
     position: "relative",
-    bottom: 80 - 16,
+    bottom: 70 - 16,
     left: -16,
     zIndex: 9,
     backgroundColor: "#EDF1F4",

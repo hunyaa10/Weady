@@ -122,8 +122,7 @@ const AiChatStyle = ({ userAddress, userWeathers }) => {
               "친절한",
               "소심한",
               "진지한",
-              "친근한",
-              "예의없는",
+              "친구같은",
               "유머있는",
               "우울한",
             ].map((value) => (

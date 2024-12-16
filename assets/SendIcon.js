@@ -10,8 +10,8 @@ const SendIcon = () => {
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"
-        strokeWidth="1.5"
-        stroke="#ffffff"
+        strokeWidth="1.8"
+        stroke="#0D819E"
       >
         <Path
           strokeLinecap="round"
