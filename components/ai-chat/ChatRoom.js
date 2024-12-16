@@ -5,16 +5,16 @@ import {
   Platform,
   Text,
   TextInput,
+  TouchableOpacity,
   View,
 } from "react-native";
 import { chatStyles } from "../../style/chatStyle";
 import { globalStyles } from "../../style/globalStyle";
-import CustomButton from "../custom/CustomButton";
 import SendIcon from "../../assets/SendIcon";
 import { getAiResponse } from "../../api";
+import StyleIcon from "../../assets/StyleIcon";
 
 const styleList = ["캐주얼", "포멀", "스포티", "쿨", "빈티지", "페미닌"];
-const areaList = ["결혼식", "장례식", "상견례", "집들이", "면접"];
 
 const ChatRoom = ({ userAddress, userWeathers, aiStyleOptions }) => {
   const flatListRef = useRef();
@@ -30,43 +30,19 @@ const ChatRoom = ({ userAddress, userWeathers, aiStyleOptions }) => {
     setMessages((prev) => [...prev, userMsg]);
     setInputValue("");
 
-    // 장소응답
-    const matchedArea = areaList.find((area) => input.includes(area));
-    if (matchedArea) {
-      const aiAnswer = await getAiResponse(
-        input,
-        userAddress,
-        userWeathers,
-        matchedArea,
-        "",
-        aiStyleOptions
-      );
-      const aiMsg = { role: "ai", content: aiAnswer };
-      setMessages((prev) => [...prev, aiMsg]);
-      return;
-    }
-
     const aiAnswer = await getAiResponse(
       input,
       userAddress,
       userWeathers,
       "",
-      "",
       aiStyleOptions
     );
     const aiMsg = { role: "ai", content: aiAnswer };
     setMessages((prev) => [...prev, aiMsg]);
+  };
 
-    // 옷추천응답
-    const clothingKeywords = ["스타일", "옷", "입고", "추천"];
-    const isClothingAnswer = clothingKeywords.some((keyword) =>
-      aiAnswer.includes(keyword)
-    );
-
-    if (isClothingAnswer) {
-      setShowStyleOptions(true);
-      return;
-    }
+  const handleClickStyleBtn = () => {
+    setShowStyleOptions((prev) => !prev);
   };
 
   const handleStyleSelection = async (userStyle) => {
@@ -82,7 +58,6 @@ const ChatRoom = ({ userAddress, userWeathers, aiStyleOptions }) => {
       `${userStyle}한 스타일 추천해줘`,
       userAddress,
       userWeathers,
-      "",
       userStyle,
       aiStyleOptions
     );
@@ -119,6 +94,12 @@ const ChatRoom = ({ userAddress, userWeathers, aiStyleOptions }) => {
       />
 
       <View style={chatStyles.inputContainer}>
+        <TouchableOpacity
+          style={chatStyles.inputBtn}
+          onPress={handleClickStyleBtn}
+        >
+          <StyleIcon />
+        </TouchableOpacity>
         <TextInput
           style={chatStyles.userInput}
           value={inputValue}
@@ -126,9 +107,12 @@ const ChatRoom = ({ userAddress, userWeathers, aiStyleOptions }) => {
           placeholder="질문을 입력하세요"
           onSubmitEditing={() => handleSubmit(inputValue)}
         />
-        <CustomButton onPress={() => handleSubmit(inputValue)}>
+        <TouchableOpacity
+          style={chatStyles.inputBtn}
+          onPress={() => handleSubmit(inputValue)}
+        >
           <SendIcon />
-        </CustomButton>
+        </TouchableOpacity>
       </View>
 
       {showStyleOptions && (
