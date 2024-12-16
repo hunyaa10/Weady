@@ -44,7 +44,10 @@ ReactNative를 사용하여 날씨를 토대로한 오늘의 코디추천어플�
 <br />
 
 ## 📃페이지 미리보기
+![screenshot]()
+![screenshot]()
+
 <img src='https://github.com/user-attachments/assets/a043d05d-74c2-4cb2-96a6-6f6a26645fda' width='150px' />
 <img src='https://github.com/user-attachments/assets/91a8493e-16a4-4a44-8994-f3fe724dbbda' width='150px' />
-<img src='https://github.com/user-attachments/assets/ee65c9e6-6084-483b-9669-ad345f79b254' width='150px' />
-<img src='https://github.com/user-attachments/assets/6a5c25ec-5433-4196-ad31-97bbdd316ffe' width='150px' />
+<img src='https://github.com/user-attachments/assets/3ee37e08-534a-4947-bc53-a8fc9396893d' width='150px' />
+<img src='https://github.com/user-attachments/assets/e95905fb-ecca-47fe-a0e4-f4374e1266d7' width='150px' />
