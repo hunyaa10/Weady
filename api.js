@@ -5,10 +5,37 @@ const aiApiKey = OPEN_AI_API_KEY;
 // 공통 대답 규칙
 const responseRules = `
   대답규칙:
-  1. 날씨나 복장 관련 질문이 없으면 일상적인 대화를 나눈다.
-  2. 날씨를 물으면 **기온(섭씨), 바람, 햇빛**을 기준으로 대답한다.
-  3. 내가 선택한 스타일이나 장소에 맞는 옷을 **날씨에 맞게** 추천해준다.
+  1. 사용자가 날씨를 질문하면 **기온(섭씨), 바람, 햇빛**을 기준으로 대답한다.
+  2. 사용자가 선택한 스타일에 맞는 옷을 **날씨에 맞게** 추천해준다.
 `;
+
+// 사용자지역정보
+let userInfo = {
+  dateInfo: "",
+  locationInfo: "",
+  weatherInfo: "",
+  isUserInfo: false,
+};
+
+// 날씨키워드
+const isWeatherQuery = (query) => {
+  const weatherKeywords = [
+    "날씨",
+    "기온",
+    "온도",
+    "바람",
+    "비",
+    "눈",
+    "햇빛",
+    "입지",
+    "입고",
+    "밖에",
+    "입을까",
+    "추천",
+    "옷",
+  ];
+  return weatherKeywords.some((keyword) => query.includes(keyword));
+};
 
 export const fetchAiResponse = async (userQuery) => {
   const fullQuery = `
@@ -77,13 +104,6 @@ export const selectedAiStyleForUser = (gender, character, type) => {
   return responseStyle.join(", ");
 };
 
-let userInfo = {
-  dateInfo: "",
-  locationInfo: "",
-  weatherInfo: "",
-  isUserInfo: false,
-};
-
 export const getAiResponse = async (
   userQuery,
   userAddress,
@@ -92,6 +112,10 @@ export const getAiResponse = async (
   aiStyleOptions = {}
 ) => {
   const { gender, character, type } = aiStyleOptions;
+
+  const aiStyle = selectedAiStyleForUser(gender, character, type);
+
+  const isWeatherKeyword = isWeatherQuery(userQuery);
 
   if (!userInfo.isUserInfo) {
     const dateInfo = `오늘 날짜는 ${Object.keys(userWeathers)[0]}야`;
@@ -103,17 +127,18 @@ export const getAiResponse = async (
     userInfo = { dateInfo, locationInfo, weatherInfo, isUserInfo: true };
   }
 
-  const aiStyle = selectedAiStyleForUser(gender, character, type);
-
   const baseQuery = `
-    ${userQuery}
-    (${userInfo.dateInfo}, ${userInfo.locationInfo}, ${userInfo.weatherInfo}, AI(너) 특징: ${aiStyle})
+    ${userQuery}, AI(너) 특징: ${aiStyle}
   `;
 
   let finalQuery = baseQuery;
 
   if (matchedStyle !== "") {
     finalQuery = `${baseQuery}, 내가 선택한 스타일: ${matchedStyle}`;
+  }
+
+  if (isWeatherKeyword) {
+    finalQuery = `${baseQuery}, ${userInfo.dateInfo}, ${userInfo.locationInfo}, ${userInfo.weatherInfo}`;
   }
 
   // console.log(finalQuery);
